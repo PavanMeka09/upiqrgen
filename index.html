@@ -3,66 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UPI QR Generator</title>
+  <title>upiqrgen</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-        },
-        extend: {
-          animation: {
-            float: 'float 25s infinite linear',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
-              '25%': { transform: 'translate(5vw, 10vh) rotate(5deg)' },
-              '50%': { transform: 'translate(-5vw, 15vh) rotate(-5deg)' },
-              '75%': { transform: 'translate(10vw, -5vh) rotate(3deg)' }
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: "Montserrat", sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-900 text-gray-100 min-h-screen p-4 overflow-y-auto">
-  <div id="shapesContainer" class="fixed inset-0 overflow-hidden -z-10"></div>
-
-  <div class="max-w-md mx-auto mt-8 bg-gray-800/60 backdrop-blur-xl rounded-2xl p-6 space-y-6 shadow-2xl relative border border-gray-700/30">
+<body class="bg-gray-900 text-gray-100 min-h-screen p-4 overflow-y-auto relative">
+  <div class="max-w-md mx-auto mt-8 bg-gray-800/60 backdrop-blur-xl rounded-2xl p-6 space-y-6 shadow-2xl relative border border-gray-700/30 z-10">
     <h1 class="text-3xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">UPI QR Generator</h1>
 
     <form id="upiForm" class="space-y-5">
-      <div>
-        <label class="block text-sm font-medium text-blue-300 mb-2">Payee UPI ID</label>
-        <div class="relative group">
-          <input id="pa" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="text" placeholder="id@upi" required />
-          <svg class="w-5 h-5 absolute left-3 top-3.5 text-gray-400 group-hover:text-blue-400 transition-colors" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-          </svg>
-        </div>
+      <div class="relative group">
+        <input id="pa" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="text" placeholder="UPI ID" maxlength="50"/>
+        <i class="fa fa-user absolute left-3 top-4 text-gray-400 group-hover:text-blue-400 transition-colors"></i>
       </div>
-
-      <div>
-        <label class="block text-sm font-medium text-blue-300 mb-2">Amount (₹)</label>
-        <div class="relative group">
-          <input id="am" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="number" placeholder="100" step="0.01" min="1" max="100000" autocomplete="off"/>
-          <span class="absolute left-3 top-3.5 text-gray-400 group-hover:text-blue-400 transition-colors">₹</span>
-        </div>
+      <div class="relative group">
+        <input id="am" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="text" placeholder="1 - 100000" maxlength="6" autocomplete="off"/>
+        <i class="fa fa-indian-rupee-sign absolute left-3 top-4 text-gray-400 group-hover:text-blue-400 transition-colors"></i>
       </div>
-
-      <div>
-        <label class="block text-sm font-medium text-blue-300 mb-2">Note</label>
-        <div class="relative group">
-          <input id="tn" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="text" placeholder="Payment for services"/>
-          <svg class="w-5 h-5 absolute left-3 top-3.5 text-gray-400 group-hover:text-blue-400 transition-colors" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"/>
-          </svg>
-        </div>
+      <div class="relative group">
+        <input id="tn" class="w-full pl-10 pr-4 py-3 bg-gray-700/40 border-2 border-gray-600/30 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all group-hover:border-blue-500/30" type="text" placeholder="Payment Note" maxlength="200"/>
+        <i class="fa fa-comment-dots absolute left-3 top-4 text-gray-400 group-hover:text-blue-400 transition-colors"></i>
       </div>
     </form>
 
@@ -72,139 +37,19 @@
         <canvas id="qrCanvas" class="mx-auto rounded-lg shadow-xl w-full max-w-[256px]"></canvas>
         <div class="flex flex-col gap-3 items-center mt-5">
           <button id="shareBtn" class="w-full px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg text-white transition-all font-medium shadow-lg flex items-center justify-center transform hover:scale-105">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
-            </svg>
-            Share
+            <i class="fa fa-share-alt mr-2"></i> Share
           </button>
           <button id="openUpiBtn" class="w-full px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-600 hover:to-cyan-700 rounded-lg text-white transition-all font-medium shadow-lg flex items-center justify-center transform hover:scale-105">
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6.3 12.3l10-10a1 1 0 0 1 1.4 0l4 4a1 1 0 0 1 0 1.4l-10 10a1 1 0 0 1-.7.3H7a1 1 0 0 1-1-1v-4a1 1 0 0 1 .3-.7zM8 16h2.59l9-9L17 4.41l-9 9V16z"/>
-            </svg>
-            Open App
+            <i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> Open UPI App
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="text-center mt-8 mb-4 text-gray-400">
+  <footer class="text-center mt-8 mb-4 text-gray-400 relative z-10">
     Made by <a href="https://github.com/PavanMeka09" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors">@PavanMeka09</a>
   </footer>
-
-<script>
-const randomColor = () => {
-  const colors = [
-    'from-indigo-600/30 to-purple-600/30',
-    'from-pink-600/30 to-rose-500/30',
-    'from-emerald-600/30 to-cyan-500/30',
-    'from-amber-600/30 to-orange-500/30'
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
-
-const createShape = () => {
-  const shape = document.createElement('div');
-  const size = Math.floor(Math.random() * (400 - 200) + 200);
-  const delay = Math.random() * -20;
-  const duration = 25 + Math.random() * 15;
-  
-  shape.className = `absolute rounded-full blur-3xl opacity-40 animate-float bg-gradient-to-r ${randomColor()}`;
-  shape.style.width = `${size}px`;
-  shape.style.height = `${size}px`;
-  shape.style.left = `${Math.random() * 100}%`;
-  shape.style.top = `${Math.random() * 100}%`;
-  shape.style.animation = `float ${duration}s ${delay}s infinite linear`;
-  
-  return shape;
-};
-
-const generateShapes = () => {
-  const container = document.getElementById('shapesContainer');
-  for(let i = 0; i < 8; i++) container.appendChild(createShape());
-};
-
-const form = document.getElementById('upiForm');
-const qrContainer = document.getElementById('qrContainer');
-const canvas = document.getElementById('qrCanvas');
-const paInput = document.getElementById('pa');
-
-function isValidUPI(upi) {
-  return /^[\w.-]{2,256}@[a-zA-Z]{2,64}$/.test(upi);
-}
-
-function generateQR() {
-  const upiId = paInput.value.trim();
-  if (!isValidUPI(upiId)) {
-    qrContainer.classList.add('hidden');
-    return;
-  }
-
-  const params = [`pa=${encodeURIComponent(upiId)}`];
-  const amountInput = document.getElementById('am');
-  const note = document.getElementById('tn').value.trim();
-  
-  if (amountInput.value) {
-    let amount = Math.min(Math.max(amountInput.value, 1), 100000);
-    amountInput.value = amount;
-    params.push(`am=${amount}`);
-  }
-  if (note) params.push(`tn=${encodeURIComponent(note)}`);
-
-  const link = `upi://pay?${params.join('&')}`;
-  const qrSize = window.innerWidth < 400 ? 200 : 256;
-  
-  QRCode.toCanvas(canvas, link, { 
-    width: qrSize,
-    margin: 1,
-    color: { dark: '#000000', light: '#ffffff' }
-  }, error => error ? null : qrContainer.classList.remove('hidden'));
-}
-
-form.addEventListener('input', () => {
-  clearTimeout(form.debounce);
-  form.debounce = setTimeout(generateQR, 1);
-});
-
-document.getElementById('shareBtn').addEventListener('click', async () => {
-  try {
-    canvas.toBlob(blob => {
-      const file = new File([blob], 'upi-qr.png', { type: 'image/png' });
-      if (navigator.canShare?.({ files: [file] })) {
-        navigator.share({ files: [file], title: 'UPI QR Code', text: 'Scan to pay via UPI' });
-      } else {
-        const link = document.createElement('a');
-        link.download = 'upi-qr.png';
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        URL.revokeObjectURL(link.href);
-      }
-    });
-  } catch (error) {
-    alert('Sharing failed. Downloading instead...');
-  }
-});
-
-document.getElementById('openUpiBtn').addEventListener('click', () => {
-  const upiId = paInput.value.trim();
-  if (!isValidUPI(upiId)) return;
-
-  const params = new URLSearchParams();
-  params.set('pa', upiId);
-  const amount = document.getElementById('am').value.trim();
-  const note = document.getElementById('tn').value.trim();
-  if (amount) params.set('am', amount);
-  if (note) params.set('tn', note);
-
-  const link = `upi://pay?${params.toString()}`;
-  window.location.href = link;
-});
-
-window.addEventListener('resize', () => generateQR());
-window.addEventListener('load', () => {
-  generateShapes();
-  generateQR();
-});
-</script>
+  <script src="./index.js"></script>
 </body>
 </html>
